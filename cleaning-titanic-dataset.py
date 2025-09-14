@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 # import environtment
 import pandas as pd
 import numpy as np
@@ -13,26 +7,17 @@ import matplotlib.pyplot as plt
 pd.set_option('display.max_columns', 200)
 pd.set_option('display.width', 220)
 
-# In[2]:
-
-
 # melakukan load data
 df = pd.read_csv('/kaggle/input/titanic-dataset/Titanic Dataset.csv')
 df.head()
 df.shape
 df.columns
 
-# In[3]:
-
-
 # melakukan EDA singkat
 df.info()
 df.describe(include='all').T
 df.isnull().sum().sort_values(ascending=False)
 df.nunique().sort_values()
-
-# In[4]:
-
 
 # melakukan data cleaning
 def clean_titanic(df):
@@ -83,10 +68,6 @@ df_clean = clean_titanic(df)
 df_clean.head()
 df_clean.isnull().sum()
 
-
-# In[5]:
-
-
 # check data quality
 def dq_check(df):
     report = {}
@@ -101,11 +82,6 @@ def dq_check(df):
 
 dq_check(df_clean)
     
-    
-    
-
-# In[6]:
-
 
 # simpan hasil bersih ke CSV & SQLite (load)
 df_clean.to_csv('/kaggle/working/titanic_clean.csv', index=False)
@@ -116,8 +92,6 @@ df_clean.to_sql('titanic_clean', conn, if_exists='replace', index=False)
 
 # contoh query via pandas
 pd.read_sql_query("SELECT pclass, COUNT(*) as cnt FROM titanic_clean GROUP BY pclass", conn)
-
-# In[7]:
 
 
 # contoh query sql
@@ -132,15 +106,11 @@ ORDER BY pclass;
 """
 pd.read_sql_query(q, conn)
 
-# In[8]:
-
 
 # contoh via pandas
 df_clean.groupby('pclass').agg(total=('survived','size'), survived=('survived','sum')).assign(
     survival_rate_pct=lambda x: 100*x['survived']/x['total']
 )
-
-# In[9]:
 
 
 # visualisasi secara singkat
@@ -151,7 +121,6 @@ plt.title('Survival rate by Pclass & Sex')
 plt.ylabel('Survival rate (fraction)')
 plt.show()
 
-# In[10]:
 
 
 # membuat ETL function dan menjalankan reproducible
@@ -170,7 +139,6 @@ def run_etl(input_csv, out_csv, out_db):
 # run
 run_etl('/kaggle/input/titanic-dataset/Titanic Dataset.csv', '/kaggle/working/titanic_clean.csv', '/kaggle/working/titanic.db')
 
-# In[ ]:
 
 
 
